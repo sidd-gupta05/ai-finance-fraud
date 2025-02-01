@@ -54,13 +54,13 @@ export const users = [
   },
 ];
 
-const getResult = async () => {
-  const res = await fetch("localhost:5000/frauds", {
-    data: users,
-    method: "POST",
-  });
-  const data = await res.json();
-  return data;
-};
+// const getResult = async () => {
+//   const res = await fetch("localhost:5000/frauds", {
+//     data: users,
+//     method: "POST",
+//   });
+//   const data = await res.json();
+//   return data;
+// };
 
-export const result = await getResult();
+// export const result = await getResult();
