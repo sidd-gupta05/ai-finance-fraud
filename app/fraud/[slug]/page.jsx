@@ -3,19 +3,13 @@ import { useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { useParams } from "next/navigation";
+import { result } from "@/app/lib/seed";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const data = [
-  { isFraudster: true, username: "john_doe", transactions: 15, reason: "Suspicious transactions" },
-  { isFraudster: false, username: "jane_smith", transactions: 30, reason: "Legitimate user" },
-  { isFraudster: true, username: "fraud_guy", transactions: 22, reason: "Multiple chargebacks" },
-  { isFraudster: false, username: "legit_user", transactions: 40, reason: "Verified identity" },
-];
-
 export default function UserDetails() {
   const params = useParams();
-  const user = data.find((u) => u.username === params.slug);
+  const user = result.results.find((u) => u.user === params.slug);
   const [isBlocked, setIsBlocked] = useState(false);
 
   if (!user) {
@@ -27,7 +21,7 @@ export default function UserDetails() {
   }
 
   const handleBlockUser = () => {
-    if (window.confirm(`Are you sure you want to block ${user.username}?`)) {
+    if (window.confirm(`Are you sure you want to block ${user.user}?`)) {
       setIsBlocked(true);
     }
   };
@@ -38,17 +32,17 @@ export default function UserDetails() {
         {/* User Info */}
         <div className="w-full text-center">
           <h1 className="text-4xl font-bold text-gray-800 capitalize">
-            {user.username.replace("_", " ")}
+            {user.user.replace("_", " ")}
           </h1>
           <p className="text-lg mt-4">
             <strong className="text-gray-700">Fraudulent:</strong>{" "}
-            <span className={`font-semibold ${user.isFraudster ? "text-red-500" : "text-green-500"}`}>
-              {user.isFraudster ? "Yes" : "No"}
+            <span className={`font-semibold ${user.is_fraudster === "Yes" ? "text-red-500" : "text-green-500"}`}>
+              {user.is_fraudster === "Yes" ? "Yes" : "No"}
             </span>
           </p>
           <p className="text-lg mt-2">
-            <strong className="text-gray-700">Reason:</strong>{" "}
-            <span className="text-gray-600">{user.reason}</span>
+            <strong className="text-gray-700">Fraud Score:</strong>{" "}
+            <span className="text-gray-600">{user.prediction_score.toFixed(2)}</span>
           </p>
         </div>
 
@@ -59,8 +53,8 @@ export default function UserDetails() {
               labels: ["Fraud", "Legit"],
               datasets: [
                 {
-                  label: "Fraud Rate",
-                  data: [user.isFraudster ? 80 : 20, user.isFraudster ? 20 : 80],
+                  label: "Fraud Probability",
+                  data: [user.prediction_score * 100, (1 - user.prediction_score) * 100],
                   backgroundColor: ["#ef4444", "#10b981"],
                 },
               ],

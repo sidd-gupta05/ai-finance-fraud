@@ -10,6 +10,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Doughnut } from "react-chartjs-2";
+import { result } from "@/app/lib/seed";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -36,27 +37,27 @@ export default function FraudTable() {
           <TableHeader>
             <TableRow className="bg-gray-200">
               <TableHead className="p-3 text-left text-gray-700">Username</TableHead>
-              <TableHead className="p-3 text-left text-gray-700">Transactions</TableHead>
+              <TableHead className="p-3 text-left text-gray-700">Risk Score</TableHead>
               <TableHead className="p-3 text-left text-gray-700">Fraud Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((item, index) => (
+            {result.results.map((item, index) => (
               <TableRow
                 key={index}
                 className={`cursor-pointer transition-all duration-200 ${
-                  item.isFraudster ? "bg-red-100 hover:bg-red-200" : "hover:bg-gray-100"
+                  item.is_fraudster === 'Yes' ? "bg-red-100 hover:bg-red-200" : "hover:bg-gray-100"
                 }`}
-                onClick={() => handleRowClick(item.username)}
+                onClick={() => handleRowClick(item.user)}
               >
-                <TableCell className="p-4 font-medium">{item.username.replace("_", " ")}</TableCell>
-                <TableCell className="p-4">{item.transactions}</TableCell>
+                <TableCell className="p-4 font-medium">{item.user.replace("_", " ")}</TableCell>
+                <TableCell className="p-4">{item.prediction_score.toFixed(2)*100}%</TableCell>
                 <TableCell
                   className={`p-4 font-semibold ${
-                    item.isFraudster ? "text-red-600" : "text-green-600"
+                    item.is_fraudster === 'Yes' ? "text-red-600" : "text-green-600"
                   }`}
                 >
-                  {item.isFraudster ? "Fraud" : "Legit"}
+                  {item.is_fraudster === 'Yes' ? "Fraud" : "Legit"}
                 </TableCell>
               </TableRow>
             ))}

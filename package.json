@@ -22,6 +22,7 @@
     "@radix-ui/react-switch": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.7",
     "@tanstack/react-table": "^8.20.6",
+    "axios": "^1.7.9",
     "chart.js": "^4.4.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
