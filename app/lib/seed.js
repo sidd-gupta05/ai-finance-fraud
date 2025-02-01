@@ -1,4 +1,4 @@
-users = [
+export const users = [
   {
     user: "krrish",
     data: [
