@@ -1,0 +1,1 @@
+included better pkg manager - yarn & removeded ai model to reduce app size.
